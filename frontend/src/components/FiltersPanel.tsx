@@ -82,7 +82,7 @@ const FilterPanel: FC<Props> = ({ className, filters, setFilters, clearFilters }
   }
 
   function getExpansionGroup(id: ExpansionOption) {
-    return id === 'all' ? undefined : t(`series-${getExpansionSeries(id)}`, { ns: 'common/sets' })
+    return id === 'all' ? undefined : t(`series-${getExpansionSeries(id)}`, { ns: 'common/sets', defaultValue: `Series ${getExpansionSeries(id)}` })
   }
 
   return (

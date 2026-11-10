@@ -22,7 +22,7 @@ export default function Missions() {
   const { t } = useTranslation(['pages/collection', 'filters'])
   const { data: account } = useAccount()
 
-  const [expansion, setExpansion] = useState<ExpansionId>(expansionsWithMissions[0])
+  const [expansion, setExpansion] = useState<ExpansionId>(expansionDropdownOptions[0])
   const [ownedFilter, setOwnedFilter] = useState<OwnedOption>('all')
   const [typeFilter, setTypeFilter] = useState<MissionType>('all')
   const [missions, setMissions] = useState<Mission[] | null>(null)
@@ -30,7 +30,7 @@ export default function Missions() {
   const [resetScrollTrigger] = useState(false)
 
   const getLocalizedExpansion = (id: ExpansionId) => t(getExpansionById(id).name, { ns: 'common/sets' })
-  const getExpansionGroup = (id: ExpansionId) => t(`series-${getExpansionSeries(id)}`, { ns: 'common/sets' })
+  const getExpansionGroup = (id: ExpansionId) => t(`series-${getExpansionSeries(id)}`, { ns: 'common/sets', defaultValue: `Series ${getExpansionSeries(id)}` })
 
   useEffect(() => {
     let missions = getMissionsForExpansion(expansion)
