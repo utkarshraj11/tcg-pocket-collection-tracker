@@ -48,18 +48,41 @@ interface PropsDropdown<T> extends Props<T> {
   label?: string
   value: T
   onChange: (value: T) => void
+  /** Wraps consecutive options with the same group label in an `<optgroup>`. Options mapped to `undefined` stay ungrouped. */
+  group?: (x: T) => string | undefined
 }
 
-export function DropdownFilter<T extends string | number>({ label, options, value, onChange, className, show = (x) => String(x) }: PropsDropdown<T>) {
+export function DropdownFilter<T extends string | number>({ label, options, value, onChange, className, show = (x) => String(x), group }: PropsDropdown<T>) {
+  const renderOption = (x: T) => (
+    <option key={x} value={x}>
+      {show(x)}
+    </option>
+  )
+
+  const groups: { label: string | undefined; items: T[] }[] = []
+  for (const x of options) {
+    const groupLabel = group?.(x)
+    const last = groups.at(-1)
+    if (last && last.label === groupLabel) {
+      last.items.push(x)
+    } else {
+      groups.push({ label: groupLabel, items: [x] })
+    }
+  }
+
   return (
     <label className={cn(commonClassName, 'flex items-baseline justify-between gap-4 px-2 py-1 text-neutral-400', className)}>
       {label && <span className="text-sm ml-1">{label}</span>}
       <select value={value} onChange={(e) => onChange(e.target.value as T)} className="min-h-[27px] text-sm text-right cursor-pointer">
-        {options.map((x) => (
-          <option key={x} value={x}>
-            {show(x)}
-          </option>
-        ))}
+        {groups.map((g, i) =>
+          g.label === undefined ? (
+            g.items.map(renderOption)
+          ) : (
+            <optgroup key={`${g.label}-${i}`} label={g.label}>
+              {g.items.map(renderOption)}
+            </optgroup>
+          ),
+        )}
       </select>
     </label>
   )

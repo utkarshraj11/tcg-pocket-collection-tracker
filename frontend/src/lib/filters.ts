@@ -1,10 +1,15 @@
 import i18n from '@/i18n'
-import { type Card, type Collection, energies, expansionIds, type Rarity, type RaritySettingsRow } from '@/types'
+import { type Card, type Collection, type ExpansionId, energies, expansionIds, type Rarity, type RaritySettingsRow } from '@/types'
 import { allCards, getCardByInternalId } from './CardsDB'
 import { levenshtein } from './levenshtein'
 import { getCardNameByLang, getExtraCards, getWantedCards } from './utils'
 
 export const expansionOptions = ['all', ...expansionIds] as const
+
+/** Series an expansion belongs to: its leading letter (A1a -> 'A'), or 'promo' for the promo sets. Translated via the `common/sets` key `series-<series>`. */
+export function getExpansionSeries(id: ExpansionId): string {
+  return id.startsWith('P-') ? 'promo' : id.charAt(0)
+}
 export const sortByOptions = ['expansion-newest', 'rarity', 'type', 'recent'] as const
 export const cardTypeOptions = [...energies, 'dragon', 'colorless'] as const
 export const ownershipOptions = ['all', 'missing', 'registered'] as const

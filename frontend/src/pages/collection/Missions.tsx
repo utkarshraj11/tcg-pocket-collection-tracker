@@ -3,16 +3,20 @@ import { useTranslation } from 'react-i18next'
 import { DropdownFilter, TabsFilter } from '@/components/Filters'
 import { MissionsTable } from '@/components/MissionsTable'
 import { getExpansionById } from '@/lib/CardsDB'
+import { getExpansionSeries } from '@/lib/filters'
 import { expansionsWithMissions, getMissionsForExpansion } from '@/lib/MissionsDB'
 import { getMissionType, type MissionType } from '@/lib/utils'
 import { useAccount } from '@/services/account/useAccount'
-import type { ExpansionId, Mission } from '@/types'
+import { type ExpansionId, expansionIds, type Mission } from '@/types'
 import MissionDetail from './MissionDetail'
 
 const ownedOptions = ['all', 'owned', 'missing'] as const
 type OwnedOption = (typeof ownedOptions)[number]
 
 const typeOptions: MissionType[] = ['all', 'normal', 'secret', 'complete']
+
+// Newest first, matching the Collection filter, so each series forms one contiguous <optgroup>.
+const expansionDropdownOptions = [...expansionsWithMissions].sort((a, b) => expansionIds.indexOf(a) - expansionIds.indexOf(b))
 
 export default function Missions() {
   const { t } = useTranslation(['pages/collection', 'filters'])
@@ -26,6 +30,7 @@ export default function Missions() {
   const [resetScrollTrigger] = useState(false)
 
   const getLocalizedExpansion = (id: ExpansionId) => t(getExpansionById(id).name, { ns: 'common/sets' })
+  const getExpansionGroup = (id: ExpansionId) => t(`series-${getExpansionSeries(id)}`, { ns: 'common/sets' })
 
   useEffect(() => {
     let missions = getMissionsForExpansion(expansion)
@@ -56,10 +61,11 @@ export default function Missions() {
       <div className="flex flex-wrap gap-2 mx-4">
         <DropdownFilter
           label={t('expansion', { ns: 'common/sets' })}
-          options={expansionsWithMissions}
+          options={expansionDropdownOptions}
           value={expansion}
           onChange={setExpansion}
           show={getLocalizedExpansion}
+          group={getExpansionGroup}
         />
         <TabsFilter options={ownedOptions} value={ownedFilter} onChange={setOwnedFilter} show={(x) => t(x, { ns: 'filters', keyPrefix: 'f-owned' })} />
         <TabsFilter options={typeOptions} value={typeFilter} onChange={setTypeFilter} show={(x) => t(x, { ns: 'filters', keyPrefix: 'f-missiontype' })} />
