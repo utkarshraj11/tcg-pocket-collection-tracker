@@ -58,27 +58,18 @@ export function DropdownFilter<T extends string | number>({ label, options, valu
     </option>
   )
 
-  const groups: { label: string | undefined; items: T[] }[] = []
-  for (const x of options) {
-    const groupLabel = group?.(x)
-    const last = groups.at(-1)
-    if (last && last.label === groupLabel) {
-      last.items.push(x)
-    } else {
-      groups.push({ label: groupLabel, items: [x] })
-    }
-  }
+  const groups = Map.groupBy(options, (x) => group?.(x))
 
   return (
     <label className={cn(commonClassName, 'flex items-baseline justify-between gap-4 px-2 py-1 text-neutral-400', className)}>
       {label && <span className="text-sm ml-1">{label}</span>}
       <select value={value} onChange={(e) => onChange(e.target.value as T)} className="min-h-[27px] text-sm text-right cursor-pointer">
-        {groups.map((g, i) =>
-          g.label === undefined ? (
-            g.items.map(renderOption)
+        {[...groups].map(([groupLabel, items]) =>
+          groupLabel === undefined ? (
+            items.map(renderOption)
           ) : (
-            <optgroup key={`${g.label}-${i}`} label={g.label}>
-              {g.items.map(renderOption)}
+            <optgroup key={groupLabel} label={groupLabel}>
+              {items.map(renderOption)}
             </optgroup>
           ),
         )}
