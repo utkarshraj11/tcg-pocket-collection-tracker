@@ -14,8 +14,6 @@ const ownedOptions = ['all', 'owned', 'missing'] as const
 type OwnedOption = (typeof ownedOptions)[number]
 
 const typeOptions: MissionType[] = ['all', 'normal', 'secret', 'complete']
-
-// Newest first, matching the Collection filter, so each series forms one contiguous <optgroup>.
 const expansionDropdownOptions = [...expansionsWithMissions].sort((a, b) => expansionIds.indexOf(a) - expansionIds.indexOf(b))
 
 export default function Missions() {
@@ -30,7 +28,11 @@ export default function Missions() {
   const [resetScrollTrigger] = useState(false)
 
   const getLocalizedExpansion = (id: ExpansionId) => t(getExpansionById(id).name, { ns: 'common/sets' })
-  const getExpansionGroup = (id: ExpansionId) => t(`series-${getExpansionSeries(id)}`, { ns: 'common/sets', defaultValue: `Series ${getExpansionSeries(id)}` })
+  const getExpansionGroup = (id: ExpansionId) =>
+    t(`series-${getExpansionSeries(id)}`, {
+      ns: 'common/sets',
+      defaultValue: `Series ${getExpansionSeries(id)}`,
+    })
 
   useEffect(() => {
     let missions = getMissionsForExpansion(expansion)

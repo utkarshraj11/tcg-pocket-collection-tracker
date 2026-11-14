@@ -6,7 +6,6 @@ import { getCardNameByLang, getExtraCards, getWantedCards } from './utils'
 
 export const expansionOptions = ['all', ...expansionIds] as const
 
-/** Series an expansion belongs to: its leading letter (A1a -> 'A'), 'special' for special packs (SP1), or 'promo' for promo sets (P-A). Translated via the `common/sets` key `series-<series>`. */
 export function getExpansionSeries(id: ExpansionId): string {
   if (id.startsWith('P-')) {
     return 'promo'

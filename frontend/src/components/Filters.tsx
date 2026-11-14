@@ -48,7 +48,6 @@ interface PropsDropdown<T> extends Props<T> {
   label?: string
   value: T
   onChange: (value: T) => void
-  /** Wraps consecutive options with the same group label in an `<optgroup>`. Options mapped to `undefined` stay ungrouped. */
   group?: (x: T) => string | undefined
 }
 
