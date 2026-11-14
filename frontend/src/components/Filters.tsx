@@ -63,7 +63,7 @@ export function DropdownFilter<T extends string | number>({ label, options, valu
   return (
     <label className={cn(commonClassName, 'flex items-baseline justify-between gap-4 px-2 py-1 text-neutral-400', className)}>
       {label && <span className="text-sm ml-1">{label}</span>}
-      <select value={value} onChange={(e) => onChange(e.target.value as T)} className="min-h-[27px] text-sm text-right cursor-pointer">
+      <select value={value} onChange={(e) => onChange(e.target.value as T)} className="min-w-0 min-h-[27px] text-sm text-right cursor-pointer">
         {[...groups].map(([groupLabel, items]) =>
           groupLabel === undefined ? (
             items.map(renderOption)
