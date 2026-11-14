@@ -28,11 +28,6 @@ export default function Missions() {
   const [resetScrollTrigger] = useState(false)
 
   const getLocalizedExpansion = (id: ExpansionId) => t(getExpansionById(id).name, { ns: 'common/sets' })
-  const getExpansionGroup = (id: ExpansionId) =>
-    t(`series-${getExpansionSeries(id)}`, {
-      ns: 'common/sets',
-      defaultValue: `Series ${getExpansionSeries(id)}`,
-    })
 
   useEffect(() => {
     let missions = getMissionsForExpansion(expansion)
@@ -67,7 +62,7 @@ export default function Missions() {
           value={expansion}
           onChange={setExpansion}
           show={getLocalizedExpansion}
-          group={getExpansionGroup}
+          group={getExpansionSeries}
         />
         <TabsFilter options={ownedOptions} value={ownedFilter} onChange={setOwnedFilter} show={(x) => t(x, { ns: 'filters', keyPrefix: 'f-owned' })} />
         <TabsFilter options={typeOptions} value={typeFilter} onChange={setTypeFilter} show={(x) => t(x, { ns: 'filters', keyPrefix: 'f-missiontype' })} />

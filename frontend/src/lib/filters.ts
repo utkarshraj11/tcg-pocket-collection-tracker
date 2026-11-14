@@ -7,13 +7,8 @@ import { getCardNameByLang, getExtraCards, getWantedCards } from './utils'
 export const expansionOptions = ['all', ...expansionIds] as const
 
 export function getExpansionSeries(id: ExpansionId): string {
-  if (id.startsWith('P-')) {
-    return 'promo'
-  }
-  if (id.startsWith('SP')) {
-    return 'special'
-  }
-  return id.charAt(0)
+  const series = id.startsWith('P-') ? 'promo' : id.startsWith('SP') ? 'special' : id.charAt(0)
+  return i18n.t(`series-${series}`, { ns: 'common/sets', defaultValue: `Series ${series}` })
 }
 export const sortByOptions = ['expansion-newest', 'rarity', 'type', 'recent'] as const
 export const cardTypeOptions = [...energies, 'dragon', 'colorless'] as const
