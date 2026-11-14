@@ -7,20 +7,19 @@ import { getExpansionSeries } from '@/lib/filters'
 import { expansionsWithMissions, getMissionsForExpansion } from '@/lib/MissionsDB'
 import { getMissionType, type MissionType } from '@/lib/utils'
 import { useAccount } from '@/services/account/useAccount'
-import { type ExpansionId, expansionIds, type Mission } from '@/types'
+import type { ExpansionId, Mission } from '@/types'
 import MissionDetail from './MissionDetail'
 
 const ownedOptions = ['all', 'owned', 'missing'] as const
 type OwnedOption = (typeof ownedOptions)[number]
 
 const typeOptions: MissionType[] = ['all', 'normal', 'secret', 'complete']
-const expansionDropdownOptions = [...expansionsWithMissions].sort((a, b) => expansionIds.indexOf(a) - expansionIds.indexOf(b))
 
 export default function Missions() {
   const { t } = useTranslation(['pages/collection', 'filters'])
   const { data: account } = useAccount()
 
-  const [expansion, setExpansion] = useState<ExpansionId>(expansionDropdownOptions[0])
+  const [expansion, setExpansion] = useState<ExpansionId>(expansionsWithMissions[0])
   const [ownedFilter, setOwnedFilter] = useState<OwnedOption>('all')
   const [typeFilter, setTypeFilter] = useState<MissionType>('all')
   const [missions, setMissions] = useState<Mission[] | null>(null)
@@ -58,7 +57,7 @@ export default function Missions() {
       <div className="flex flex-wrap gap-2 mx-4">
         <DropdownFilter
           label={t('expansion', { ns: 'common/sets' })}
-          options={expansionDropdownOptions}
+          options={expansionsWithMissions}
           value={expansion}
           onChange={setExpansion}
           show={getLocalizedExpansion}
